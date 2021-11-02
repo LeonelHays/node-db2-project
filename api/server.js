@@ -8,12 +8,15 @@ server.use(express.json());
 
 server.use('/api/cars', carsRouter)
 
-server.get('/', (req, res) => {
-  res.send(`<h2>Let's do this!</h2>`);
-});
-
 server.use('*', (req, res) => {
-  res.status(404).json({ message: `${req.method} ${req.baseUrl} not found!` })
+  res.status(404).json({ message: `not found!` })
 })
+
+server.use((err, req, res, next) => { // eslint-disable-line
+    res.status(err.status || 500).json({
+      message: err.message
+    })
+  })
+
 
 module.exports = server
